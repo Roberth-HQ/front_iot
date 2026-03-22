@@ -1,16 +1,18 @@
 // src/api/axios.js
 import axios from 'axios';
-import { useAuthStore } from '../context/authStore';
-
 const api = axios.create({
-  baseURL: 'http://localhost:3000/api', // Cambia esto por tu URL de backend
+  baseURL: 'http://localhost:4000/', 
+  headers:{
+    'Content-Type': 'application/json'
+  }
 });
 
 // Interceptor para incluir el Token en cada petición automáticamente
 api.interceptors.request.use((config) => {
-  const token = useAuthStore.getState().token;
+  //onst token = useAuthStore.getState().token;
+  const token =localStorage.getItem('auth-storage');
   if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
+    //config.headers.Authorization = `Bearer ${token}`;
   }
   return config;
 });

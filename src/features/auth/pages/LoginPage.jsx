@@ -1,80 +1,69 @@
-// src/features/auth/pages/LoginPage.jsx
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuthStore } from '../../../context/authStore';
-import api from '../../../api/axios'; // Importamos el axios configurado
-import Input from '../../../components/Input';
-import Button from '../../../components/Button';
+import { useAuthStore } from '../store/authStore.js';
+import Button from '../../../components/Button.jsx';
+import Input from '../../../components/Input.jsx';
+import api from '../../../api/axios.js';
 
 const LoginPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
   
-  const { login } = useAuthStore(); // Zustand
+  // Traemos la función 'login' de nuestro Cerebro (Zustand)
+  const loginAction = useAuthStore((state) => state.login);
   const navigate = useNavigate();
 
-  const handleSubmit = async (e) => {
+  const handleFormSubmit = async (e) => {
     e.preventDefault();
-    setIsLoading(true);
-    try {
-      // Llamada al backend usando la instancia de axios centralizada
-      const res = await api.post('/auth/login', { email, password });
-      
-      // Guardamos el token en Zustand (y automáticamente en LocalStorage)
-      login(res.data.token);
-      
-      // Redirigimos al Dashboard
-      navigate('/dashboard');
-    } catch (err) {
-      console.error(err);
-      alert("Error: " + (err.response?.data?.message || "No se pudo conectar con el servidor"));
-    } finally {
-      setIsLoading(false);
+    try{
+const response = await api.post('/auth/login', { email, password });
+    
+    // REVISIÓN AQUÍ: 
+    // Si tu backend manda el token directo en response.data, úsalo así:
+    const token = response.data.token;
+    const user = response.data.user || { email }; // Si no viene user, inventamos uno con el email
+
+    console.log("LOGIN_PAGE: Datos a enviar al cerebro:", { user, token });
+
+    loginAction(user, token); // <--- Ahora sí enviamos datos reales
+    
+    navigate('/dashboard');
+    } catch (error){
+      alert('Error al iniciar sesion: ' +(error.response?.data?.message || 'Servidor no disponible'));
     }
+
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
-      <div className="max-w-md w-full bg-white rounded-xl shadow-lg p-8">
-        <div className="text-center mb-10">
-          <h2 className="text-3xl font-bold text-gray-800">IoT Blockchain</h2>
-          <p className="text-gray-500 mt-2">Ingresa a tu panel de control</p>
-        </div>
+    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', backgroundColor: '#f3f4f6' }}>
+      <form onSubmit={handleFormSubmit} style={{ background: 'white', padding: '40px', borderRadius: '12px', boxShadow: '0 10px 15px rgba(0,0,0,0.1)', width: '350px' }}>
+        <h2 style={{ textAlign: 'center', marginBottom: '25px', color: '#1e293b' }}>IoT Blockchain</h2>
+        
+        <Input 
+          label="Correo Electrónico"
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          placeholder="tu@correo.com"
+        />
 
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <Input
-            label="Correo Electrónico"
-            id="email"
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="admin@ejemplo.com"
-            required
-          />
+        <Input 
+          label="Contraseña"
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          placeholder="••••••••"
+        />
 
-          <Input
-            label="Contraseña"
-            id="password"
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            placeholder="••••••••"
-            required
-          />
-
-          <Button type="submit" isLoading={isLoading}>
-            Iniciar Sesión
+        <div style={{ marginTop: '25px' }}>
+          <Button type="submit" variant="primary">
+            Entrar al Sistema
           </Button>
-        </form>
-
-        <div className="mt-6 text-center text-sm text-gray-500">
-          ¿No tienes cuenta? <span className="text-blue-600 font-medium">Contacta al Super Admin</span>
         </div>
-      </div>
+      </form>
     </div>
   );
+
 };
 
-// ESTA ES LA LÍNEA QUE FALTABA Y CAUSABA EL ERROR EN AppRoutes
 export default LoginPage;

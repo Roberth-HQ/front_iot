@@ -1,19 +1,30 @@
-import { create } from "zustand";
+import { create } from 'zustand';
+import { persist } from 'zustand/middleware'; // <--- Importante
 
-export const useAuthStore = create ((set)=>({
-    user:null,
-    token:null,
-    isAuthenticated:false,
+export const useAuthStore = create(
+  persist(
+    (set) => ({
+      user: null,
+      token: null,
+      isAuthenticated: false,
 
-    login: (userData, token) =>set({
-        user:userData,
-        token:token,
-        isAuthenticated:true
+      login: (userData, userToken) => {
+        console.log("CEREBRO: Guardando datos...", userData);
+        set({ 
+          user: userData, 
+          token: userToken, 
+          isAuthenticated: true 
+        });
+      },
+
+      logout: () => {
+        console.log("CEREBRO: Limpiando sesión");
+        set({ user: null, token: null, isAuthenticated: false });
+        localStorage.removeItem('auth-storage'); // Limpieza extra
+      },
     }),
-
-    logout:()=>set({
-        user:null,
-        token:null,
-        isAuthenticated:false
-    }),
-}));
+    {
+      name: 'auth-storage', // Nombre de la llave en LocalStorage
+    }
+  )
+);
