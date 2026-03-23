@@ -1,0 +1,89 @@
+/* src/features/dashboard/pages/Dispositivos.css */
+
+.dispositivos-container {
+  animation: fadeIn 0.5s ease;
+}
+
+.header-page {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.title { margin: 0; font-size: 24px; color: var(--text-main); }
+.subtitle { margin: 5px 0 0; color: var(--text-muted); font-size: 14px; }
+
+.grid-dispositivos {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.device-card {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 20px;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.device-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+  border-color: var(--primary-color);
+}
+
+.card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.status-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+.online { background-color: #10b981; box-shadow: 0 0 8px #10b981; }
+.offline { background-color: #ef4444; }
+
+.device-name { font-size: 18px; margin: 10px 0; color: var(--text-main); }
+
+.device-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin: 20px 0;
+  background: var(--bg-factory);
+  padding: 10px;
+  border-radius: 8px;
+}
+
+.stat-label { display: block; font-size: 10px; color: var(--text-muted); text-transform: uppercase; }
+.stat-value { font-size: 16px; font-weight: bold; color: var(--text-main); }
+
+.card-actions { display: flex; gap: 10px; margin-top: 15px; }
+
+.btn-action {
+  flex: 1;
+  padding: 8px;
+  border-radius: 6px;
+  border: 1px solid var(--border-color);
+  background: transparent;
+  color: var(--text-main);
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.btn-action.primary {
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
