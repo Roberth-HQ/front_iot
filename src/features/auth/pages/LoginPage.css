@@ -1,0 +1,83 @@
+/* src/features/auth/pages/LoginPage.css */
+
+.split-container {
+  display: flex;
+  min-height: 100vh;
+  background-color: var(--bg-factory); /* Usa la variable global */
+  transition: background-color 0.3s ease;
+}
+
+/* --- LADO IZQUIERDO (IMAGEN) --- */
+.image-section {
+  flex: 1; /* Ocupa el 50% */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  /* El filtro sutil ayuda a la visibilidad si hay texto */
+  filter: var(--image-filter); 
+}
+
+/* Usamos un degradado sutil para integrar la imagen con el fondo de la fábrica */
+.image-section::after {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: linear-gradient(135deg, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.1) 100%);
+}
+
+/* --- LADO DERECHO (LOGIN) --- */
+.login-section {
+  flex: 1; /* Ocupa el otro 50% */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--bg-card); /* Color de fondo del panel */
+  border-left: 1px solid var(--border-color);
+  transition: all 0.3s ease;
+  padding: 20px;
+}
+
+.login-form-wrapper {
+  width: 100%;
+  max-width: 380px;
+  text-align: center;
+  color: var(--text-main);
+}
+
+.factory-logo {
+  font-family: cursive; /* Para el estilo de Instagram */
+  font-size: 2.5rem;
+  margin-bottom: 30px;
+  color: var(--text-main);
+}
+
+.divider {
+  margin: 20px 0;
+  display: flex;
+  align-items: center;
+}
+
+.divider-line {
+  flex: 1;
+  height: 1px;
+  background-color: var(--border-color);
+}
+
+.divider-text {
+  padding: 0 10px;
+  color: var(--text-muted);
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.forgot-password {
+  font-size: 14px;
+  color: var(--primary-color);
+  cursor: pointer;
+  margin-top: 20px;
+  text-decoration: none;
+}

@@ -1,0 +1,123 @@
+.dashboard-container {
+  display: flex;
+  height: 100vh;
+  background-color: var(--bg-factory);
+}
+
+/* SIDEBAR */
+.sidebar {
+  width: 260px;
+  background-color: var(--bg-card);
+  border-right: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  transition: all 0.3s ease;
+}
+
+.sidebar-header {
+  padding: 25px;
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: var(--primary-color);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.sidebar-menu {
+  flex: 1;
+  padding: 20px 0;
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  padding: 12px 25px;
+  color: var(--text-main);
+  text-decoration: none;
+  gap: 15px;
+  transition: 0.2s;
+}
+
+.menu-item:hover {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+.menu-item.active {
+  border-right: 4px solid var(--primary-color);
+  background-color: rgba(56, 189, 248, 0.1);
+}
+
+
+
+
+
+
+/* HEADER */
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.top-header {
+  height: 70px;
+  background-color: var(--bg-card);
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 30px;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+
+
+.icon-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 24px;
+  color: var(--text-muted); /* Por defecto gris */
+  transition: 0.3s;
+}
+
+.menu-item:hover .icon-wrapper,
+.menu-item.active .icon-wrapper {
+  color: white; /* Cambia a blanco al seleccionar */
+  transform: scale(1.1);
+}
+
+.sidebar-footer {
+  padding: 20px;
+  border-top: 1px solid var(--border-color);
+}
+
+.user-badge {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.user-name {
+  font-size: 14px;
+  font-weight: bold;
+  margin: 0;
+}
+
+.user-role {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin: 0;
+}
+
+.content-body {
+  padding: 30px;
+  overflow-y: auto;
+  flex: 1;
+  background-color: var(--bg-factory); /* Fondo que cambia con el tema */
+}

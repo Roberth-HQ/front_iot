@@ -1,29 +1,19 @@
-import React from 'react';
-
-const Button = ({ children, onClick, type = "button", variant = "primary" }) => {
-  // Estilos base
-  const baseStyle = {
-    padding: '10px 20px',
-    borderRadius: '6px',
-    border: 'none',
-    cursor: 'pointer',
-    fontWeight: '600',
-    transition: '0.3s',
-    width: '100%'
-  };
-
-  // Colores según la variante
-  const variants = {
-    primary: { backgroundColor: '#2563eb', color: 'white' },
-    secondary: { backgroundColor: '#64748b', color: 'white' },
-    blockchain: { backgroundColor: '#10b981', color: 'white' }, // Verde para éxito/blockchain
-  };
-
+// src/components/Button.jsx
+const Button = ({ children, type = "button", onClick }) => {
   return (
     <button 
       type={type} 
-      onClick={onClick} 
-      style={{ ...baseStyle, ...variants[variant] }}
+      onClick={onClick}
+      style={{
+        backgroundColor: 'var(--primary-color)',
+        color: 'white',
+        padding: '12px',
+        border: 'none',
+        borderRadius: '8px',
+        width: '100%',
+        cursor: 'pointer',
+        fontWeight: 'bold'
+      }}
     >
       {children}
     </button>
