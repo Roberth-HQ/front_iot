@@ -3,6 +3,8 @@ import { useAuthStore } from '../features/auth/store/authStore';
 import LoginPage from '../features/auth/pages/LoginPage';
 import DashboardLayout from '../layouts/DashboardLayout';
 import DispositivosPage from '../features/dashboard/pages/DispositivosPage';
+import ProyectosPage from '../features/projects/pages/ProyectosPage';
+import LocationsPage from '../features/location/LocationsPage';
 
 export const AppRoutes = () => {
   // 1. IMPORTANTE: Extraemos isAuthenticated CORRECTAMENTE
@@ -24,8 +26,9 @@ export const AppRoutes = () => {
             <Route index element={<Navigate to="dashboard" />} />
             {/* Esta es la página hija que se verá en el Outlet */}
             <Route path="dashboard" element={<div><h1>¡DASHBOARD ACTIVO! 🚀</h1></div>} />
-            <Route path="proyectos" element={<div><h1>Mis Proyectos IoT</h1></div>} />
             <Route path="dispositivos" element={<DispositivosPage />} />
+            <Route path='proyectos' element={<ProyectosPage/>}/>
+            <Route path="/proyectos/:projectId/locations" element={<LocationsPage />} />
           </Route>
 
           

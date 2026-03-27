@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import { Outlet, Link, useLocation } from 'react-router-dom';
 import { 
   LayoutDashboard, 
@@ -10,6 +10,8 @@ import {
   UserCircle 
 } from 'lucide-react'; // Iconos pro
 import { useThemeStore } from '../store/themeStore';
+import { useProjectStore } from '../store/projectStore';
+import api from '../api/axios'
 import ThemeToggle from '../components/ThemeToggle';
 import './Dashboard.css';
 
@@ -24,6 +26,23 @@ const DashboardLayout = () => {
     { name: 'Usuarios', path: '/usuarios', icon: <Users size={20} /> },
     { name: 'Configuración', path: '/configuracion', icon: <Settings size={20} /> },
   ];
+  const { projects, setProjects, selectedProjectId, setSelectedProject } = useProjectStore();
+
+  // Cargamos los proyectos al entrar al Dashboard
+  useEffect(() => {
+    const fetchProjects = async () => {
+      try {
+        const res = await api.get('/project');
+        setProjects(res.data);
+        if (res.data.length > 0 && !selectedProjectId) {
+          setSelectedProject(res.data[0].id); // Selecciona el primero por defecto
+        }
+      } catch (err) {
+        console.error("Error cargando proyectos", err);
+      }
+    };
+    fetchProjects();
+  }, []);
 
   return (
     <div className="dashboard-container">
@@ -60,19 +79,38 @@ const DashboardLayout = () => {
 
       {/* --- CONTENIDO DERECHO --- */}
       <div className="main-content">
-        <header className="top-header">
-          <h2 className="page-title">
-            {menuItems.find(m => m.path === location.pathname)?.name || 'Bienvenido'}
-          </h2>
-          
-          <div className="header-right">
-            <div className="search-container">
-              <input type="text" placeholder="Buscar..." className="search-input" />
-            </div>
-            <ThemeToggle />
-            <button className="icon-btn"><UserCircle size={24} /></button>
-          </div>
-        </header>
+<header className="top-header">
+  <div className="project-selector-wrapper">
+    <label className="project-label">Proyecto Activo</label>
+    <select 
+      value={selectedProjectId || ''} 
+      onChange={(e) => setSelectedProject(e.target.value)}
+      className="project-select"
+    >
+      <option value="" disabled>Seleccionar proyecto...</option>
+      {projects.map(p => (
+        <option key={p.id} value={p.id}>{p.name}</option>
+      ))}
+    </select>
+  </div>
+  
+  <div className="header-right">
+    {/* El interruptor de Luna/Sol que faltaba */}
+    <ThemeToggle />
+    
+    <div className="header-divider"></div>
+    
+    <div className="user-profile-header">
+      <div className="user-info-text">
+        <span className="user-name">Admin</span>
+        <span className="user-status">En línea</span>
+      </div>
+      <div className="user-avatar">
+        <UserCircle size={32} strokeWidth={1.5} />
+      </div>
+    </div>
+  </div>
+</header>
 
         {/* EL "LIENZO" DONDE CAMBIAN LAS PÁGINAS */}
         <main className="content-body">
