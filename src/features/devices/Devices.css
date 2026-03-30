@@ -1,0 +1,45 @@
+.devices-container { padding: 2rem; color: #333; }
+.devices-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem; }
+.title-section h1 { margin: 0; font-size: 1.8rem; }
+.title-section p { color: #666; margin: 0; }
+
+.devices-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.devices-table th { background: #f8fafc; padding: 1rem; text-align: left; border-bottom: 2px solid #e2e8f0; }
+.devices-table td { padding: 1rem; border-bottom: 1px solid #e2e8f0; }
+
+.device-info-cell { display: flex; align-items: center; gap: 12px; }
+.device-avatar { 
+  background: #eff6ff; color: #3b82f6; 
+  padding: 8px; border-radius: 8px; 
+}
+
+.mono-text { font-family: monospace; background: #f1f5f9; padding: 2px 6px; border-radius: 4px; font-size: 0.9rem; }
+
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.btn-revoke {
+  border: none;
+  background: #fee2e2;
+  color: #ef4444;
+  padding: 6px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.btn-revoke:disabled { opacity: 0.3; cursor: not-allowed; }

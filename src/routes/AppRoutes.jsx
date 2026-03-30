@@ -5,6 +5,7 @@ import DashboardLayout from '../layouts/DashboardLayout';
 import DispositivosPage from '../features/dashboard/pages/DispositivosPage';
 import ProyectosPage from '../features/projects/pages/ProyectosPage';
 import LocationsPage from '../features/location/LocationsPage';
+import DevicesPage from '../features/devices/DevicesPages';
 
 export const AppRoutes = () => {
   // 1. IMPORTANTE: Extraemos isAuthenticated CORRECTAMENTE
@@ -29,6 +30,7 @@ export const AppRoutes = () => {
             <Route path="dispositivos" element={<DispositivosPage />} />
             <Route path='proyectos' element={<ProyectosPage/>}/>
             <Route path="/proyectos/:projectId/locations" element={<LocationsPage />} />
+            <Route path="/location/:locationId/devices" element={<DevicesPage />} />
           </Route>
 
           
