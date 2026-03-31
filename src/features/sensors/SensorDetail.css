@@ -1,0 +1,27 @@
+.sensor-detail-container { padding: 2rem; max-width: 1200px; margin: 0 auto; }
+.detail-header { display: flex; align-items: center; gap: 2rem; margin-bottom: 2rem; }
+.badge-id { font-size: 0.8rem; background: #f1f5f9; padding: 4px 8px; border-radius: 4px; color: #64748b; }
+
+.stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin-bottom: 2rem; }
+.stat-card { background: white; padding: 1.5rem; border-radius: 12px; display: flex; align-items: center; gap: 1rem; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+
+.readings-table { width: 100%; border-collapse: collapse; background: white; border-radius: 8px; overflow: hidden; }
+.readings-table th { padding: 1rem; background: #f8fafc; text-align: left; color: #475569; }
+.readings-table td { padding: 1rem; border-bottom: 1px solid #f1f5f9; }
+
+.value-cell { font-weight: bold; color: #2563eb; }
+.hash-cell { font-family: 'Courier New', Courier, monospace; color: #059669; display: flex; align-items: center; gap: 8px; font-size: 0.85rem; }
+.icon-shield { color: #10b981; }
+
+.sensor-card.clickable {
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 1px solid transparent;
+}
+
+.sensor-card.clickable:hover {
+  background-color: #e2e8f0; /* Un gris un poco más oscuro */
+  border-color: #3b82f6;    /* Un borde azul */
+  transform: translateY(-2px); /* Un pequeño salto hacia arriba */
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
