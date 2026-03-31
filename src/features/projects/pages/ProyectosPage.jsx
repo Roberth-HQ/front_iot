@@ -20,6 +20,7 @@ const ProyectosPage = () => {
 
   useEffect(() => { fetchProyectos(); }, []);
 
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     

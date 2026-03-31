@@ -15,3 +15,6 @@ npx tailwindcss init -p
 npm install -D tailwindcss postcss autoprefixer
 
 npm install lucide-react
+
+para el dashboard:
+npm install recharts

@@ -7,6 +7,7 @@ import ProyectosPage from '../features/projects/pages/ProyectosPage';
 import LocationsPage from '../features/location/LocationsPage';
 import DevicesPage from '../features/devices/DevicesPages';
 import SensorDetailPage from '../features/sensors/SensorDetailPage';
+import Dashboard from '../features/board/Dashboard';
 
 export const AppRoutes = () => {
   // 1. IMPORTANTE: Extraemos isAuthenticated CORRECTAMENTE
@@ -27,7 +28,8 @@ export const AppRoutes = () => {
             {/* Si entras a "/", te manda a "/dashboard" */}
             <Route index element={<Navigate to="dashboard" />} />
             {/* Esta es la página hija que se verá en el Outlet */}
-            <Route path="dashboard" element={<div><h1>¡DASHBOARD ACTIVO! 🚀</h1></div>} />
+            {/* <Route path="/dashboard" element={<Dashboard activeProjectId={activeProjectId} />} /> */}
+            <Route path="/dashboard" element={<Dashboard />} /> 
             <Route path="dispositivos" element={<DispositivosPage />} />
             <Route path='proyectos' element={<ProyectosPage/>}/>
             <Route path="/proyectos/:projectId/locations" element={<LocationsPage />} />
