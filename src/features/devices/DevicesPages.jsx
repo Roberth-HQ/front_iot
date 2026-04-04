@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import api from '../../api/axios';
 import { 
-  Cpu, ArrowLeft, Plus, Trash2, ZapOff, Activity, 
+  Cpu, ArrowLeft, Plus, Trash2, ZapOff, Activity, Edit3,
   Thermometer, Droplets, Gauge, ChevronDown, ChevronUp, 
   X, PlusCircle, ChevronRight 
 } from 'lucide-react';
@@ -19,6 +19,7 @@ const DevicesPage = () => {
   const [showDeviceModal, setShowDeviceModal] = useState(false);
   const [showSensorModal, setShowSensorModal] = useState(false);
   const [selectedDeviceId, setSelectedDeviceId] = useState(null);
+  const [editingDevice, setEditingDevice] = useState(null);
 
   const [newDevice, setNewDevice] = useState({ deviceId: '', name: '' });
   const [newSensor, setNewSensor] = useState({ name: '', type: 'temperature', unit: '°C' });
@@ -43,11 +44,16 @@ const DevicesPage = () => {
   const handleCreateDevice = async (e) => {
     e.preventDefault();
     try {
-      await api.post('/devices', { ...newDevice, locationId });
+      if (editingDevice) {
+        await api.put(`/devices/${editingDevice.id}`, newDevice);
+      } else {
+        await api.post('/devices', { ...newDevice, locationId });
+      }
       setShowDeviceModal(false);
+      setEditingDevice(null);
       setNewDevice({ deviceId: '', name: '' });
       fetchDevices();
-    } catch (err) { alert("Error al vincular"); }
+    } catch (err) { alert("Error al procesar dispositivo"); }
   };
 
   const handleCreateSensor = async (e) => {
@@ -88,9 +94,13 @@ const DevicesPage = () => {
     <div className="devices-container">
       {/* BREADCRUMBS */}
       <nav className="breadcrumbs">
-        <span className="breadcrumb-item clickable" onClick={() => navigate('/proyectos')}>Proyectos</span>
+        <span className="breadcrumb-item clickable" onClick={() => navigate('/proyectos')}>
+          Proyectos
+        </span>
         <ChevronRight size={14} className="separator" />
-        <span className="breadcrumb-item clickable" onClick={() => navigate(-1)}>Locaciones</span>
+        <span className="breadcrumb-item clickable" onClick={() => navigate(-1)}>
+          Location
+        </span>
         <ChevronRight size={14} className="separator" />
         <span className="breadcrumb-item active">Dispositivos</span>
       </nav>
@@ -100,7 +110,7 @@ const DevicesPage = () => {
           <ArrowLeft size={18} /> Volver
         </button>
         <div className="title-section">
-          <h1>Dispositivos IoT</h1>
+          <h1 className="theme-title">Dispositivos IoT</h1>
           <p className="subtitle-theme">Locación: <strong>{locationId}</strong></p>
         </div>
         <button className="btn-primary" onClick={() => setShowDeviceModal(true)}>
@@ -108,68 +118,7 @@ const DevicesPage = () => {
         </button>
       </div>
 
-      {/* MODAL DISPOSITIVO */}
-      {showDeviceModal && (
-        <div className="modal-overlay">
-          <div className="modal-content">
-            <div className="modal-header">
-              <h2>Nuevo Dispositivo</h2>
-              <button className="btn-close" onClick={() => setShowDeviceModal(false)}><X size={20}/></button>
-            </div>
-            <form onSubmit={handleCreateDevice}>
-              <div className="form-group">
-                <label>ID Físico (Unique)</label>
-                <input type="text" required value={newDevice.deviceId} onChange={(e) => setNewDevice({...newDevice, deviceId: e.target.value})} />
-              </div>
-              <div className="form-group">
-                <label>Nombre Personalizado</label>
-                <input type="text" value={newDevice.name} onChange={(e) => setNewDevice({...newDevice, name: e.target.value})} />
-              </div>
-              <div className="modal-actions">
-                <button type="button" className="btn-cancel" onClick={() => setShowDeviceModal(false)}>Cancelar</button>
-                <button type="submit" className="btn-save">Vincular</button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
-
-      {/* MODAL SENSOR */}
-      {showSensorModal && (
-        <div className="modal-overlay">
-          <div className="modal-content">
-            <div className="modal-header">
-              <h2>Añadir Sensor</h2>
-              <button className="btn-close" onClick={() => setShowSensorModal(false)}><X size={20}/></button>
-            </div>
-            <form onSubmit={handleCreateSensor}>
-              <div className="form-group">
-                <label>Nombre del Sensor</label>
-                <input type="text" required value={newSensor.name} onChange={(e) => setNewSensor({...newSensor, name: e.target.value})} />
-              </div>
-              <div className="form-group">
-                <label>Tipo de Sensor</label>
-                <select className="modal-select" value={newSensor.type} onChange={(e) => setNewSensor({...newSensor, type: e.target.value})}>
-                  <option value="temperature">Temperatura</option>
-                  <option value="humidity">Humedad</option>
-                  <option value="pressure">Presión</option>
-                  <option value="co2">CO2</option>
-                </select>
-              </div>
-              <div className="form-group">
-                <label>Unidad (Ej: °C)</label>
-                <input type="text" value={newSensor.unit} onChange={(e) => setNewSensor({...newSensor, unit: e.target.value})} />
-              </div>
-              <div className="modal-actions">
-                <button type="button" className="btn-cancel" onClick={() => setShowSensorModal(false)}>Cancelar</button>
-                <button type="submit" className="btn-save">Crear Sensor</button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
-
-      <div className="table-responsive">
+      <div className="table-responsive-theme">
         <table className="devices-table">
           <thead>
             <tr>
@@ -198,10 +147,17 @@ const DevicesPage = () => {
                   <td><code className="mono-text-theme">{dev.deviceId}</code></td>
                   <td><span className={`status-pill ${dev.status}`}>{dev.status}</span></td>
                   <td className="actions-cell">
-                    <button className="btn-revoke" title="Revocar" onClick={() => handleRevoke(dev.id)} disabled={dev.status === 'REVOKED'}>
+                    <button className="btn-action edit" onClick={() => {
+                      setEditingDevice(dev);
+                      setNewDevice({ deviceId: dev.deviceId, name: dev.name });
+                      setShowDeviceModal(true);
+                    }}>
+                      <Edit3 size={16} />
+                    </button>
+                    <button className="btn-action revoke" onClick={() => handleRevoke(dev.id)} disabled={dev.status === 'REVOKED'}>
                       <ZapOff size={16} />
                     </button>
-                    <button className="btn-delete-device" title="Eliminar" onClick={() => handleDeleteDevice(dev.id)}>
+                    <button className="btn-action delete" onClick={() => handleDeleteDevice(dev.id)}>
                       <Trash2 size={16} />
                     </button>
                   </td>
@@ -236,6 +192,67 @@ const DevicesPage = () => {
           </tbody>
         </table>
       </div>
+
+      {/* MODAL DISPOSITIVO */}
+      {showDeviceModal && (
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h2>{editingDevice ? 'Editar Dispositivo' : 'Nuevo Dispositivo'}</h2>
+              <button className="btn-close" onClick={() => { setShowDeviceModal(false); setEditingDevice(null); }}><X size={20}/></button>
+            </div>
+            <form onSubmit={handleCreateDevice}>
+              <div className="form-group">
+                <label>ID Físico</label>
+                <input type="text" required value={newDevice.deviceId} onChange={(e) => setNewDevice({...newDevice, deviceId: e.target.value})} disabled={editingDevice} />
+              </div>
+              <div className="form-group">
+                <label>Nombre Personalizado</label>
+                <input type="text" value={newDevice.name} onChange={(e) => setNewDevice({...newDevice, name: e.target.value})} />
+              </div>
+              <div className="modal-actions">
+                <button type="button" className="btn-cancel" onClick={() => { setShowDeviceModal(false); setEditingDevice(null); }}>Cancelar</button>
+                <button type="submit" className="btn-save">Confirmar</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* MODAL SENSOR */}
+      {showSensorModal && (
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h2>Añadir Sensor</h2>
+              <button className="btn-close" onClick={() => setShowSensorModal(false)}><X size={20}/></button>
+            </div>
+            <form onSubmit={handleCreateSensor}>
+              <div className="form-group">
+                <label>Nombre del Sensor</label>
+                <input type="text" required value={newSensor.name} onChange={(e) => setNewSensor({...newSensor, name: e.target.value})} />
+              </div>
+              <div className="form-group">
+                <label>Tipo</label>
+                <select className="modal-select" value={newSensor.type} onChange={(e) => setNewSensor({...newSensor, type: e.target.value})}>
+                  <option value="temperature">Temperatura</option>
+                  <option value="humidity">Humedad</option>
+                  <option value="pressure">Presión</option>
+                  <option value="co2">CO2</option>
+                </select>
+              </div>
+              <div className="form-group">
+                <label>Unidad</label>
+                <input type="text" value={newSensor.unit} onChange={(e) => setNewSensor({...newSensor, unit: e.target.value})} />
+              </div>
+              <div className="modal-actions">
+                <button type="button" className="btn-cancel" onClick={() => setShowSensorModal(false)}>Cancelar</button>
+                <button type="submit" className="btn-save">Crear Sensor</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

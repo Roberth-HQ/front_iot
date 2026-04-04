@@ -1,195 +1,216 @@
-.devices-container { padding: 2rem; color: #333; }
-.devices-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem; }
-.title-section h1 { margin: 0; font-size: 1.8rem; }
-.title-section p { color: #666; margin: 0; }
+/* --- CONTENEDOR Y LAYOUT --- */
+.devices-container { padding: 2rem; }
+
+.devices-header { 
+  display: flex; 
+  align-items: center; 
+  justify-content: space-between; 
+  margin-bottom: 2rem; 
+}
+
+.theme-title { color: var(--text-main); margin: 0; font-size: 1.8rem; }
+.subtitle-theme { color: var(--text-muted); font-size: 0.9rem; }
+
+/* --- BREADCRUMBS --- */
+.breadcrumbs { 
+  display: flex; 
+  align-items: center; 
+  gap: 8px; 
+  margin-bottom: 20px; 
+  font-size: 0.85rem; 
+  color: var(--text-muted); 
+}
+.breadcrumb-item.active { color: var(--primary-color); font-weight: 700; }
+.breadcrumb-item.clickable { cursor: pointer; transition: 0.2s; }
+.breadcrumb-item.clickable:hover { color: var(--text-main); }
+.separator { color: var(--border-color); }
+
+/* --- TABLA (SISTEMA SOL Y LUNA) --- */
+.table-responsive-theme {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  overflow: hidden;
+  margin-top: 20px;
+}
 
 .devices-table {
   width: 100%;
   border-collapse: collapse;
-  background: white;
-  border-radius: 12px;
-  overflow: hidden;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  background-color: transparent !important;
+  color: var(--text-main);
 }
 
-.devices-table th { background: #f8fafc; padding: 1rem; text-align: left; border-bottom: 2px solid #e2e8f0; }
-.devices-table td { padding: 1rem; border-bottom: 1px solid #e2e8f0; }
+.devices-table th {
+  background-color: var(--bg-factory);
+  color: var(--text-muted);
+  padding: 1rem;
+  text-align: left;
+  border-bottom: 2px solid var(--border-color);
+  font-size: 0.8rem;
+  text-transform: uppercase;
+}
 
+.devices-table td {
+  padding: 1rem;
+  border-bottom: 1px solid var(--border-color);
+  background-color: transparent !important;
+}
+
+/* --- ELEMENTOS DENTRO DE LA TABLA --- */
 .device-info-cell { display: flex; align-items: center; gap: 12px; }
-.device-avatar { 
-  background: #eff6ff; color: #3b82f6; 
-  padding: 8px; border-radius: 8px; 
+
+.device-avatar {
+  background-color: var(--bg-factory);
+  color: var(--primary-color);
+  padding: 8px;
+  border-radius: 8px;
 }
 
-.mono-text { font-family: monospace; background: #f1f5f9; padding: 2px 6px; border-radius: 4px; font-size: 0.9rem; }
+.mono-text-theme {
+  background-color: var(--bg-factory);
+  color: var(--primary-color);
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-family: monospace;
+  font-size: 0.9rem;
+}
 
-.status-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
+/* --- STATUS PILLS --- */
+.status-pill {
   padding: 4px 10px;
   border-radius: 20px;
-  font-size: 0.8rem;
-  font-weight: 600;
+  font-size: 0.7rem;
+  font-weight: bold;
 }
+.status-pill.ACTIVE { background: rgba(16, 185, 129, 0.15); color: #10b981; }
+.status-pill.PENDING { background: rgba(245, 158, 11, 0.15); color: #f59e0b; }
+.status-pill.REVOKED { background: rgba(239, 68, 68, 0.15); color: #ef4444; }
 
-.btn-revoke {
-  border: none;
-  background: #fee2e2;
-  color: #ef4444;
-  padding: 6px;
-  border-radius: 6px;
-  cursor: pointer;
-}
+/* --- BOTONES DE ACCIÓN --- */
+.actions-cell { display: flex; gap: 8px; }
 
-.btn-revoke:disabled { opacity: 0.3; cursor: not-allowed; }
-
-
-
-
-.sensors-row {
-  background-color: #f8fafc;
-}
-
-.sensors-container {
-  padding: 1.5rem;
-  border-left: 4px solid #3b82f6;
-  margin: 10px;
-  background: white;
+.btn-action {
+  border: 1px solid var(--border-color);
+  background-color: var(--bg-factory);
+  color: var(--text-muted);
+  padding: 8px;
   border-radius: 8px;
-}
-
-.sensors-grid {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
-  margin-top: 1rem;
-}
-
-.sensor-card {
+  cursor: pointer;
+  transition: 0.2s;
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 10px 15px;
-  background: #f1f5f9;
-  border-radius: 8px;
-  min-width: 150px;
 }
 
-.sensor-name { font-weight: 600; font-size: 0.85rem; display: block; }
-.sensor-value { font-family: monospace; color: #3b82f6; font-size: 1.1rem; }
+.btn-action:hover { background-color: var(--bg-card); }
+.btn-action.edit:hover { color: var(--primary-color); border-color: var(--primary-color); }
+.btn-action.revoke:hover { color: #f59e0b; border-color: #f59e0b; }
+.btn-action.delete:hover { color: #ef4444; border-color: #ef4444; }
+.btn-action:disabled { opacity: 0.3; cursor: not-allowed; }
 
-.btn-expand {
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: #64748b;
-}
+/* --- SECCIÓN EXPANDIBLE (SENSORES) --- */
+.sensors-row-theme { background-color: var(--bg-factory) !important; }
 
-.status-pill {
-    padding: 2px 8px;
-    border-radius: 12px;
-    font-size: 0.75rem;
-    font-weight: bold;
+.sensors-expanded-container {
+  padding: 1.5rem;
+  background-color: var(--bg-card);
+  margin: 10px;
+  border-radius: 10px;
+  border: 1px dashed var(--border-color);
 }
-.status-pill.ACTIVE { background: #dcfce7; color: #166534; }
-.status-pill.PENDING { background: #fef9c3; color: #854d0e; }
-.status-pill.REVOKED { background: #fee2e2; color: #991b1b; }
 
 .sensors-header-inline {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 1rem;
-  border-bottom: 1px solid #334155;
-  padding-bottom: 0.5rem;
+  margin-bottom: 1.5rem;
 }
 
-.btn-add-sensor {
-  background: rgba(59, 130, 246, 0.1);
-  color: #60a5fa;
-  border: 1px dashed #3b82f6;
-  padding: 4px 12px;
-  border-radius: 4px;
-  font-size: 0.8rem;
+.sensors-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 12px;
+}
+
+.sensor-card-theme {
+  background-color: var(--bg-factory);
+  border: 1px solid var(--border-color);
+  color: var(--text-main);
+  padding: 12px;
+  border-radius: 8px;
   display: flex;
   align-items: center;
-  gap: 5px;
+  gap: 12px;
   cursor: pointer;
   transition: 0.2s;
 }
 
-.btn-add-sensor:hover {
-  background: rgba(59, 130, 246, 0.2);
+.sensor-card-theme:hover { 
+  border-color: var(--primary-color); 
+  transform: translateY(-2px); 
 }
 
-/* Estilo para los selects del modal */
-.form-group select {
-  width: 100%;
-  padding: 0.75rem;
-  background: #0f172a;
-  border: 1px solid #334155;
-  border-radius: 6px;
-  color: white;
-}
-
-
-
-
-
-.devices-container { padding: 2rem; }
-
-/* BREADCRUMBS */
-.breadcrumbs { display: flex; align-items: center; gap: 8px; margin-bottom: 20px; font-size: 0.85rem; color: var(--text-muted); }
-.breadcrumb-item.active { color: var(--primary-color); font-weight: 700; }
-.breadcrumb-item.clickable { cursor: pointer; }
-.breadcrumb-item.clickable:hover { color: var(--text-main); }
-
-/* HEADER */
-.devices-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem; }
-.btn-back-theme {
-  background: var(--bg-factory); border: 1px solid var(--border-color); color: var(--text-main);
-  padding: 8px 16px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 8px;
-}
-.subtitle-theme { color: var(--text-muted); font-size: 0.9rem; }
-
-/* TABLA DINÁMICA */
-.table-responsive { background: var(--bg-card); border-radius: 12px; border: 1px solid var(--border-color); overflow: hidden; }
-.devices-table { width: 100%; border-collapse: collapse; color: var(--text-main); }
-.devices-table th { background: var(--bg-factory); padding: 1rem; text-align: left; border-bottom: 1px solid var(--border-color); color: var(--text-muted); font-size: 0.85rem; text-transform: uppercase; }
-.devices-table td { padding: 1rem; border-bottom: 1px solid var(--border-color); }
-
-.mono-text-theme { background: var(--bg-factory); color: var(--primary-color); padding: 4px 8px; border-radius: 4px; font-family: monospace; }
-.device-avatar { background: var(--bg-factory); color: var(--primary-color); padding: 8px; border-radius: 8px; }
-
-/* EXPANDIDO SENSORES */
-.sensors-row-theme { background: var(--bg-factory); }
-.sensors-expanded-container { padding: 1.5rem; margin: 10px; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 10px; }
-.sensor-card-theme {
-  display: flex; align-items: center; gap: 12px; padding: 12px;
-  background: var(--bg-factory); border: 1px solid var(--border-color); border-radius: 8px;
-  min-width: 160px; cursor: pointer; transition: 0.2s;
-}
-.sensor-card-theme:hover { border-color: var(--primary-color); transform: scale(1.02); }
-.sensor-icon-circle { color: var(--primary-color); }
+.sensor-icon-circle { color: var(--primary-color); display: flex; }
 .snr-name { font-size: 0.8rem; color: var(--text-muted); display: block; }
-.snr-value { font-weight: bold; color: var(--text-main); }
+.snr-value { font-weight: bold; font-size: 1rem; }
 
-/* ACCIONES */
-.actions-cell { display: flex; gap: 8px; }
-.btn-revoke { background: rgba(239, 68, 68, 0.1); color: #ef4444; border: none; padding: 8px; border-radius: 6px; cursor: pointer; }
-.btn-delete-device { background: var(--bg-factory); color: var(--text-muted); border: 1px solid var(--border-color); padding: 8px; border-radius: 6px; cursor: pointer; }
-.btn-delete-device:hover { color: #ef4444; border-color: #ef4444; }
-
-/* STATUS PILLS */
-.status-pill { padding: 4px 10px; border-radius: 20px; font-size: 0.7rem; font-weight: bold; }
-.status-pill.ACTIVE { background: rgba(16, 185, 129, 0.1); color: #10b981; }
-.status-pill.PENDING { background: rgba(245, 158, 11, 0.1); color: #f59e0b; }
-.status-pill.REVOKED { background: rgba(239, 68, 68, 0.1); color: #ef4444; }
-
-/* MODAL TEMA (SELECT INCLUIDO) */
+/* --- MODALES Y FORMULARIOS --- */
 .modal-select {
-  width: 100%; padding: 12px; background: var(--bg-factory) !important;
-  color: var(--text-main) !important; border: 1px solid var(--border-color); border-radius: 8px;
+  width: 100%; 
+  padding: 12px; 
+  background-color: var(--bg-factory) !important;
+  color: var(--text-main) !important;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  outline: none;
 }
-.modal-select option { background: var(--bg-card); color: var(--text-main); }
+
+.modal-select option { 
+  background-color: var(--bg-card); 
+  color: var(--text-main); 
+}
+
+.btn-add-sensor {
+  background: transparent;
+  color: var(--primary-color);
+  border: 1px dashed var(--primary-color);
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.btn-add-sensor:hover { background: rgba(var(--primary-rgb), 0.1); }
+
+/* --- BOTÓN DE DESPLIEGUE (CHEVRON) --- */
+.btn-expand {
+  background: var(--bg-factory);
+  border: 1px solid var(--border-color);
+  color: var(--primary-color);
+  width: 32px;
+  height: 32px;
+  border-radius: 50%; /* Lo hace circular */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-expand:hover {
+  background: var(--primary-color);
+  color: white;
+  transform: scale(1.1);
+  border-color: var(--primary-color);
+}
+
+/* Animación sutil cuando está abierto */
+.row-active .btn-expand {
+  background: var(--primary-color);
+  color: white;
+  box-shadow: 0 0 10px rgba(var(--primary-rgb), 0.3);
+}
