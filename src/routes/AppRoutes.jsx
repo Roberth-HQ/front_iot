@@ -8,6 +8,7 @@ import LocationsPage from '../features/location/LocationsPage';
 import DevicesPage from '../features/devices/DevicesPages';
 import SensorDetailPage from '../features/sensors/SensorDetailPage';
 import Dashboard from '../features/board/Dashboard';
+import BlockchainPage from '../features/blockchain/BlockchainPage';
 
 export const AppRoutes = () => {
   // 1. IMPORTANTE: Extraemos isAuthenticated CORRECTAMENTE
@@ -35,6 +36,7 @@ export const AppRoutes = () => {
             <Route path="/proyectos/:projectId/locations" element={<LocationsPage />} />
             <Route path="/location/:locationId/devices" element={<DevicesPage />} />
             <Route path="/sensor/:sensorId" element={<SensorDetailPage />} />
+            <Route path="/blockchain" element={<BlockchainPage />} />
           </Route>
 
           
