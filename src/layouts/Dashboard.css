@@ -205,3 +205,28 @@
   background-color: var(--bg-factory);
   color: var(--text-main);
 }
+
+.logout-btn {
+  margin-left: 15px;
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+  border: none;
+  padding: 8px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.logout-btn:hover {
+  background: #ef4444;
+  color: white;
+  transform: scale(1.05);
+}
+
+.user-profile-header {
+  display: flex;
+  align-items: center;
+}

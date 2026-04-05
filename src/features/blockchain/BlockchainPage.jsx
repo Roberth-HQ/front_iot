@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import api from '../../api/axios';
-import { Link as LinkIcon, Database, ShieldCheck, Cpu, Clock, AlertTriangle, CheckCircle, Search } from 'lucide-react';
+import { 
+  ShieldCheck, AlertTriangle, Clock, Database, 
+  CheckCircle, RefreshCw, Box, Lock 
+} from 'lucide-react';
 import './BlockchainPage.css';
 import { useProjectStore } from '../../store/projectStore';
 
@@ -8,24 +11,21 @@ const BlockchainPage = () => {
   const { selectedProjectId } = useProjectStore();
   const [blocks, setBlocks] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [verifyingId, setVerifyingId] = useState(null); // Para el spinner del botón
+  const [verifyingId, setVerifyingId] = useState(null);
   const [auditReport, setAuditReport] = useState(null);
 
   useEffect(() => {
-    if (selectedProjectId) {
-      fetchData(selectedProjectId);
-    }
+    if (selectedProjectId) fetchData(selectedProjectId);
   }, [selectedProjectId]);
 
   const fetchData = async (projectId) => {
     try {
       setLoading(true);
-      // 1. Traer los bloques
       const res = await api.get(`/api/blockchain/explorer?projectId=${projectId}`);
       setBlocks(res.data);
       
-      // 2. Si hay bloques, auditar el primer dispositivo que encontremos (o mejorar lógica después)
       if (res.data.length > 0) {
+        // Asumimos auditoría del dispositivo del primer bloque por ahora
         const auditRes = await api.get(`/api/blockchain/audit/${res.data[0].deviceId}`);
         setAuditReport(auditRes.data);
       }
@@ -40,10 +40,10 @@ const BlockchainPage = () => {
     setVerifyingId(blockId);
     try {
       const res = await api.get(`/api/blockchain/verify/${blockId}`);
-      alert(res.data.message); // Aquí podrías usar un Toast más elegante
-      // Opcional: Actualizar el estado local para mostrar un check verde
+      // Aquí podrías disparar una notificación tipo Toast
+      alert(res.data.isValid ? "✅ Bloque íntegro" : "❌ ¡BLOQUE CORRUPTO!");
     } catch (err) {
-      alert("Error en la verificación técnica.");
+      alert("Error en la verificación.");
     } finally {
       setVerifyingId(null);
     }
@@ -51,67 +51,75 @@ const BlockchainPage = () => {
 
   return (
     <div className="blockchain-container">
-      {/* SECCIÓN 1: DASHBOARD DE ESTADO (NUEVA) */}
+      {/* EL ESCUDO DE SEGURIDAD */}
       <section className="audit-summary">
         <div className={`status-card ${auditReport?.isValidChain ? 'status-ok' : 'status-error'}`}>
           <div className="status-icon">
-            {auditReport?.isValidChain ? <ShieldCheck size={40} /> : <AlertTriangle size={40} />}
+            {auditReport?.isValidChain ? (
+              <ShieldCheck size={48} />
+            ) : (
+              <AlertTriangle size={48} />
+            )}
           </div>
           <div className="status-text">
-            <h3>Estado de Integridad de Datos</h3>
-            <p>{auditReport?.isValidChain ? "Cadena verificada y sellada." : "Se detectaron inconsistencias en la cadena."}</p>
+            <h3>{auditReport?.isValidChain ? "Integridad Garantizada" : "Alerta de Seguridad"}</h3>
+            <p>
+              {auditReport?.isValidChain 
+                ? "Todos los registros coinciden con sus firmas criptográficas originales." 
+                : "Se han detectado alteraciones manuales en los registros de la base de datos."}
+            </p>
           </div>
           <button className="re-audit-btn" onClick={() => fetchData(selectedProjectId)}>
-            Escanear ahora
+            <RefreshCw size={18} className={loading ? 'animate-spin' : ''} />
+            {loading ? " Verificando..." : " Re-auditar Sistema"}
           </button>
         </div>
       </section>
 
-      <header className="blockchain-header">
-        <h2><Search size={20} className="inline mr-2"/>Explorador de Auditoría</h2>
-        <p>Registros protegidos mediante Merkle Trees y Hash Chaining.</p>
-      </header>
+      <div className="blockchain-header">
+        <h2>Explorador de Bloques Inmutables</h2>
+        <p>Cada bloque contiene un lote de lecturas selladas con Merkle Root.</p>
+      </div>
 
-      {loading ? (
-        <div className="loader">Verificando criptografía...</div>
+      {loading && blocks.length === 0 ? (
+        <div className="loader">Sincronizando con el nodo central...</div>
       ) : (
         <div className="blockchain-feed">
           {blocks.map((block, index) => (
             <div key={block.id} className="block-card">
               <div className="block-header">
-                <span className="block-number">B-{blocks.length - index}</span>
-                <span className="block-date">
-                  <Clock size={12} /> {new Date(block.createdAt).toLocaleString()}
-                </span>
-                {/* BOTÓN DE VERIFICACIÓN (PUNTO 1 Y 5) */}
+                <div className="block-info-main">
+                  <Box size={18} className="text-blue-500" />
+                  <span className="block-number">BLOQUE # {blocks.length - index}</span>
+                </div>
+                <div className="block-date">
+                  <Clock size={14} /> {new Date(block.createdAt).toLocaleString()}
+                </div>
+              </div>
+
+              <div className="hash-grid">
+                <div className="hash-item">
+                  <label><Lock size={10} /> Sello del Bloque (Hash)</label>
+                  <code>{block.blockHash}</code>
+                </div>
+                <div className="hash-item">
+                  <label><Database size={10} /> Merkle Root (Datos)</label>
+                  <code>{block.merkleRoot}</code>
+                </div>
+              </div>
+
+              <div className="block-footer">
+                <div className="device-tag">
+                  <CheckCircle size={14} />
+                  <span><strong>{block.device?.name || 'ESP32'}</strong>: {block.batchData?.length || 0} lecturas</span>
+                </div>
                 <button 
                   className={`verify-btn ${verifyingId === block.id ? 'loading' : ''}`}
                   onClick={() => handleVerifyBlock(block.id)}
                   disabled={verifyingId === block.id}
                 >
-                  {verifyingId === block.id ? "Verificando..." : "Verificar Bloque"}
+                  {verifyingId === block.id ? "Analizando..." : "Verificar Integridad"}
                 </button>
-              </div>
-
-              <div className="hash-grid">
-                <div className="hash-item">
-                  <label>Block Hash (Sello del Bloque)</label>
-                  <code className="block-hash">{block.blockHash}</code>
-                </div>
-                <div className="hash-item">
-                  <label>Merkle Root</label>
-                  <code className="merkle-root">{block.merkleRoot}</code>
-                </div>
-                <div className="hash-item">
-                  <label>Previous Hash</label>
-                  <code className="prev-hash">{block.previousHash}</code>
-                </div>
-              </div>
-
-              <div className="block-footer">
-                <Database size={14} />
-                <span>{block.batchData?.length} lecturas de <strong>{block.device?.name}</strong></span>
-                <CheckCircle size={14} className="ml-auto text-green-500" />
               </div>
             </div>
           ))}

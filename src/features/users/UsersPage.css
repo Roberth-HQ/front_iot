@@ -1,0 +1,113 @@
+.users-container {
+  padding: 2rem;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.users-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.users-header h2 {
+  color: var(--text-primary);
+  margin: 0;
+}
+
+/* --- TABLA --- */
+.table-wrapper {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.admin-table th {
+  background: var(--dash-bg);
+  padding: 1rem;
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  text-transform: uppercase;
+}
+
+.admin-table td {
+  padding: 1rem;
+  border-bottom: 1px solid var(--border-color);
+  color: var(--text-primary);
+}
+
+.role-badge {
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: bold;
+}
+
+.role-super { background: rgba(139, 92, 246, 0.1); color: #8b5cf6; }
+.role-admin { background: rgba(59, 130, 246, 0.1); color: #3b82f6; }
+
+/* --- MODAL --- */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  backdrop-filter: blur(4px);
+}
+
+.modal-content {
+  background: var(--card-bg);
+  padding: 2rem;
+  border-radius: 20px;
+  width: 100%;
+  max-width: 450px;
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+}
+
+.form-group {
+  margin-bottom: 1.2rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+.form-group input, .form-group select {
+  width: 100%;
+  padding: 0.8rem;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  background: var(--dash-bg);
+  color: var(--text-primary);
+}
+
+.modal-actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+/* --- BOTONES --- */
+.btn-primary { background: #3b82f6; color: white; border: none; padding: 0.8rem 1.5rem; border-radius: 10px; cursor: pointer; }
+.btn-secondary { background: var(--border-color); color: var(--text-primary); border: none; padding: 0.8rem 1.5rem; border-radius: 10px; cursor: pointer; }
+.btn-danger { background: rgba(239, 68, 68, 0.1); color: #ef4444; border: none; padding: 6px; border-radius: 8px; cursor: pointer; }
+.btn-edit { background: rgba(59, 130, 246, 0.1); color: #3b82f6; border: none; padding: 6px; border-radius: 8px; cursor: pointer; margin-right: 8px; }

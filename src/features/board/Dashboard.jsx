@@ -4,74 +4,89 @@ import { useProjectStore } from '../../store/projectStore';
 import { 
   XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, AreaChart, Area 
 } from 'recharts';
-import { Activity, Cpu, MapPin, AlertTriangle, RefreshCw } from 'lucide-react';
+import { Activity, Cpu, MapPin, ShieldCheck, RefreshCw, AlertTriangle } from 'lucide-react';
 import './Dashboard.css';
 
 const Dashboard = () => {
   const { selectedProjectId, projects } = useProjectStore();
   const activeProject = projects.find(p => p.id === selectedProjectId);
 
-  const [stats, setStats] = useState({ devices: 0, locations: 0, sensors: 0 });
+  const [stats, setStats] = useState({ 
+    devices: 0, locations: 0, sensors: 0, blockchainBlocks: 0 
+  });
   const [chartData, setChartData] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  const loadDashboardData = async (projectId) => {
-    try {
-      setLoading(true);
-      // IMPORTANTE: Asegúrate que tu backend en /project/:id incluya locaciones y dispositivos
-      const res = await api.get(`/project/${projectId}`);
-      const projectData = res.data;
+const loadDashboardData = async (projectId) => {
+  try {
+    setLoading(true);
+    
+    // 1. Traemos el proyecto con todas sus ramas
+    const res = await api.get(`/project/${projectId}`);
+    const projectData = res.data;
 
-      // 1. Contamos Locaciones
-      const locations = projectData.locations || [];
+    // 2. Traemos los bloques de la blockchain
+    const bcRes = await api.get(`/api/blockchain/explorer?projectId=${projectId}`);
+
+    // --- CÁLCULO DE CONTADORES ---
+    let totalDevices = 0;
+    let totalSensors = 0;
+
+    // Recorremos locaciones -> dispositivos -> sensores
+    const locations = projectData.locations || [];
+    
+    locations.forEach(loc => {
+      const devices = loc.devices || [];
+      totalDevices += devices.length;
       
-      // 2. Contamos Dispositivos (recorriendo locaciones)
-      let devicesCount = 0;
-      let sensorsCount = 0;
-      
-      locations.forEach(loc => {
-        devicesCount += (loc.devices?.length || 0);
-        // Si tienes sensores dentro de dispositivos, los contamos también
-        loc.devices?.forEach(dev => {
-            sensorsCount += (dev.sensors?.length || 0);
-        });
+      devices.forEach(dev => {
+        totalSensors += (dev.sensors?.length || 0);
       });
+    });
 
-      setStats({
-        locations: locations.length,
-        devices: devicesCount,
-        sensors: sensorsCount // Cambiamos "Alertas" por algo real: total de sensores
-      });
+    setStats({
+      locations: locations.length,
+      devices: totalDevices,
+      sensors: totalSensors,
+      blockchainBlocks: bcRes.data.length
+    });
 
-      // 3. Generamos datos reales para la gráfica (simulados por ahora, pero con estructura)
-      // Aquí podrías mapear las últimas readings de tus sensores
-      setChartData([
-        { name: 'Lun', valor: 400 },
-        { name: 'Mar', valor: 300 },
-        { name: 'Mie', valor: 600 },
-        { name: 'Jue', valor: 800 },
-        { name: 'Vie', valor: 500 },
-      ]);
+    // --- MAPEO DE LA GRÁFICA (Datos reales del Blockchain) ---
+    const activityMap = {};
+    bcRes.data.forEach(block => {
+      // Usamos la fecha del bloque como llave
+      const date = new Date(block.createdAt).toLocaleDateString('es-ES', { weekday: 'short' });
+      // Sumamos la cantidad de lecturas que tiene ese bloque (batchData)
+      const readingsCount = block.batchData ? block.batchData.length : 0;
+      activityMap[date] = (activityMap[date] || 0) + readingsCount;
+    });
 
-    } catch (err) {
-      console.error("Error cargando Dashboard", err);
-    } finally {
-      setLoading(false);
-    }
-  };
+    const formattedChartData = Object.keys(activityMap).map(key => ({
+      name: key,
+      lecturas: activityMap[key]
+    }));
+
+    setChartData(formattedChartData.length > 0 ? formattedChartData : [{name: 'Sin datos', lecturas: 0}]);
+
+  } catch (err) {
+    console.error("Error en Dashboard:", err);
+  } finally {
+    setLoading(false);
+  }
+};
+
 
   useEffect(() => {
-    if (selectedProjectId) {
-      loadDashboardData(selectedProjectId);
-    }
+    if (selectedProjectId) loadDashboardData(selectedProjectId);
   }, [selectedProjectId]);
 
+  // Si no hay proyecto, mostramos aviso
   if (!selectedProjectId) {
     return (
       <div className="no-project-container">
-        <AlertTriangle size={48} color="#f59e0b" />
-        <h2>No hay proyecto seleccionado</h2>
-        <p>Selecciona un proyecto en la parte superior para visualizar las estadísticas.</p>
+        <AlertTriangle size={64} color="#f59e0b" />
+        <h2>Selecciona un Proyecto</h2>
+        <p>Necesitamos un contexto para mostrar las métricas de integridad y nodos.</p>
       </div>
     );
   }
@@ -80,62 +95,65 @@ const Dashboard = () => {
     <div className="dashboard-wrapper">
       <header className="dashboard-header">
         <div className="header-info">
-          <h2>Panel de Control: {activeProject?.name || 'Cargando...'}</h2>
-          <p>Estado general de la red IoT y sensores</p>
+          <h2>Panel de Control: {activeProject?.name}</h2>
+          <p>Métricas de red inmutable y despliegue de sensores</p>
         </div>
         <button className="btn-refresh" onClick={() => loadDashboardData(selectedProjectId)}>
-          <RefreshCw size={16} className={loading ? 'spin' : ''} /> Actualizar
+          <RefreshCw size={18} className={loading ? 'spin' : ''} /> 
+          {loading ? 'Sincronizando...' : 'Actualizar'}
         </button>
       </header>
 
       <div className="stats-grid">
-        <div className="stat-box">
-          <MapPin className="icon-blue" />
-          <div className="stat-content">
-            <span>Áreas / Sedes</span>
-            <h3>{stats.locations}</h3>
+        <div className="stat-card">
+          <div className="stat-icon bg-blue"><MapPin /></div>
+          <div className="stat-val">
+            <span className="label">Locaciones</span>
+            <span className="number">{stats.locations}</span>
           </div>
         </div>
-        <div className="stat-box">
-          <Cpu className="icon-purple" />
-          <div className="stat-content">
-            <span>Nodos ESP32</span>
-            <h3>{stats.devices}</h3>
+        <div className="stat-card">
+          <div className="stat-icon bg-purple"><Cpu /></div>
+          <div className="stat-val">
+            <span className="label">Dispositivos</span>
+            <span className="number">{stats.devices}</span>
           </div>
         </div>
-        <div className="stat-box">
-          <Activity className="icon-green" />
-          <div className="stat-content">
-            <span>Sensores Activos</span>
-            <h3>{stats.sensors}</h3>
+        <div className="stat-card">
+          <div className="stat-icon bg-green"><Activity /></div>
+          <div className="stat-val">
+            <span className="label">Sensores</span>
+            <span className="number">{stats.sensors}</span>
+          </div>
+        </div>
+        <div className="stat-card highlighted">
+          <div className="stat-icon bg-gold"><ShieldCheck /></div>
+          <div className="stat-val">
+            <span className="label">Bloques Blockchain</span>
+            <span className="number">{stats.blockchainBlocks}</span>
           </div>
         </div>
       </div>
 
-      <div className="chart-container">
-        <h3>Actividad de Mensajes (Últimos 5 días)</h3>
-        <div className="chart-wrapper">
+      <div className="main-chart-area">
+        <div className="chart-info">
+          <h3>Flujo de Integridad (Lecturas procesadas)</h3>
+          <p>Volumen de datos verificados y añadidos a la cadena por día.</p>
+        </div>
+        <div className="chart-h">
           <ResponsiveContainer width="100%" height="100%">
             <AreaChart data={chartData}>
-              <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
-              <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{fill: '#64748b', fontSize: 12}} />
-              <YAxis axisLine={false} tickLine={false} tick={{fill: '#64748b', fontSize: 12}} />
-              <Tooltip 
-                contentStyle={{ borderRadius: '10px', border: 'none', boxShadow: '0 10px 15px -3px rgba(0,0,0,0.1)' }}
-              />
-              <Area 
-                type="monotone" 
-                dataKey="valor" 
-                stroke="#3b82f6" 
-                strokeWidth={3}
-                fill="url(#colorValue)" 
-              />
               <defs>
-                <linearGradient id="colorValue" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.3}/>
-                  <stop offset="95%" stopColor="#3b82f6" stopOpacity={0}/>
+                <linearGradient id="colorRead" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor="#6366f1" stopOpacity={0.3}/>
+                  <stop offset="95%" stopColor="#6366f1" stopOpacity={0}/>
                 </linearGradient>
               </defs>
+              <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--border-color)" />
+              <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{fill: 'var(--text-secondary)'}} />
+              <YAxis axisLine={false} tickLine={false} tick={{fill: 'var(--text-secondary)'}} />
+              <Tooltip contentStyle={{borderRadius: '12px', background: 'var(--card-bg)', border: '1px solid var(--border-color)'}} />
+              <Area type="monotone" dataKey="lecturas" stroke="#6366f1" fillOpacity={1} fill="url(#colorRead)" strokeWidth={3} />
             </AreaChart>
           </ResponsiveContainer>
         </div>
