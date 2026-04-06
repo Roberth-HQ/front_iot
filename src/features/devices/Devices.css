@@ -214,3 +214,75 @@
   color: white;
   box-shadow: 0 0 10px rgba(var(--primary-rgb), 0.3);
 }
+
+
+.btn-action.config {
+  background: rgba(99, 102, 241, 0.1);
+  color: #6366f1;
+}
+
+.modal-config-hardware {
+  max-width: 600px !important;
+}
+
+.code-container {
+  background: #1e293b;
+  border-radius: 12px;
+  margin-top: 1rem;
+  overflow: hidden;
+  border: 1px solid #334155;
+}
+
+.code-header {
+  background: #0f172a;
+  padding: 8px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #94a3b8;
+  font-size: 0.8rem;
+  font-family: 'Courier New', Courier, monospace;
+}
+
+.code-block-theme {
+  padding: 1.5rem;
+  margin: 0;
+  color: #38bdf8;
+  font-family: 'Fira Code', 'Courier New', monospace;
+  font-size: 0.9rem;
+  overflow-x: auto;
+  line-height: 1.5;
+}
+
+.btn-copy {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: #334155;
+  color: white;
+  border: none;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  cursor: pointer;
+}
+
+.btn-copy.copied {
+  background: #10b981;
+}
+
+.config-instruction {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+}
+
+.config-footer-note {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 1rem;
+  color: #f59e0b;
+  font-size: 0.8rem;
+  font-style: italic;
+}

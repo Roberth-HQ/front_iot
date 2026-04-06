@@ -4,7 +4,7 @@ import api from '../../api/axios';
 import { 
   Cpu, ArrowLeft, Plus, Trash2, ZapOff, Activity, Edit3,
   Thermometer, Droplets, Gauge, ChevronDown, ChevronUp, 
-  X, PlusCircle, ChevronRight 
+  X, PlusCircle, ChevronRight, Terminal, Copy, Check 
 } from 'lucide-react';
 import './Devices.css';
 
@@ -18,6 +18,13 @@ const DevicesPage = () => {
 
   const [showDeviceModal, setShowDeviceModal] = useState(false);
   const [showSensorModal, setShowSensorModal] = useState(false);
+  
+  // --- NUEVOS ESTADOS PARA LA CONFIGURACIÓN ---
+  const [showConfigModal, setShowConfigModal] = useState(false);
+  const [configSnippet, setConfigSnippet] = useState("");
+  const [copied, setCopied] = useState(false);
+  // --------------------------------------------
+
   const [selectedDeviceId, setSelectedDeviceId] = useState(null);
   const [editingDevice, setEditingDevice] = useState(null);
 
@@ -28,6 +35,7 @@ const DevicesPage = () => {
     try {
       setLoading(true);
       const res = await api.get('/devices');
+      // Mantenemos tu filtro original exactamente igual
       const filtered = res.data.filter(d => d.locationId === locationId);
       setDevices(filtered);
     } catch (err) {
@@ -40,6 +48,24 @@ const DevicesPage = () => {
   useEffect(() => {
     if (locationId) fetchDevices();
   }, [locationId]);
+
+  // --- NUEVA FUNCIÓN PARA OBTENER CONFIGURACIÓN ---
+  const handleShowConfig = async (device) => {
+    try {
+      const res = await api.get(`/devices/${device.id}/config`);
+      setConfigSnippet(res.data.configSnippet);
+      setShowConfigModal(true);
+    } catch (err) {
+      alert("Error al obtener la configuración. Verifica que el endpoint /config existe.");
+    }
+  };
+
+  const handleCopyCode = () => {
+    navigator.clipboard.writeText(configSnippet);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+  // ------------------------------------------------
 
   const handleCreateDevice = async (e) => {
     e.preventDefault();
@@ -92,15 +118,11 @@ const DevicesPage = () => {
 
   return (
     <div className="devices-container">
-      {/* BREADCRUMBS */}
+      {/* BREADCRUMBS (Tu original) */}
       <nav className="breadcrumbs">
-        <span className="breadcrumb-item clickable" onClick={() => navigate('/proyectos')}>
-          Proyectos
-        </span>
+        <span className="breadcrumb-item clickable" onClick={() => navigate('/proyectos')}>Proyectos</span>
         <ChevronRight size={14} className="separator" />
-        <span className="breadcrumb-item clickable" onClick={() => navigate(-1)}>
-          Location
-        </span>
+        <span className="breadcrumb-item clickable" onClick={() => navigate(-1)}>Location</span>
         <ChevronRight size={14} className="separator" />
         <span className="breadcrumb-item active">Dispositivos</span>
       </nav>
@@ -147,6 +169,15 @@ const DevicesPage = () => {
                   <td><code className="mono-text-theme">{dev.deviceId}</code></td>
                   <td><span className={`status-pill ${dev.status}`}>{dev.status}</span></td>
                   <td className="actions-cell">
+                    {/* BOTÓN AÑADIDO: CONFIGURACIÓN */}
+                    <button 
+                      className="btn-action config" 
+                      title="Ver Configuración Hardware"
+                      onClick={() => handleShowConfig(dev)}
+                    >
+                      <Terminal size={16} />
+                    </button>
+
                     <button className="btn-action edit" onClick={() => {
                       setEditingDevice(dev);
                       setNewDevice({ deviceId: dev.deviceId, name: dev.name });
@@ -193,7 +224,42 @@ const DevicesPage = () => {
         </table>
       </div>
 
-      {/* MODAL DISPOSITIVO */}
+      {/* --- NUEVO MODAL PARA EL CÓDIGO DEL ESP32 --- */}
+      {showConfigModal && (
+        <div className="modal-overlay">
+          <div className="modal-content" style={{ maxWidth: '600px' }}>
+            <div className="modal-header">
+              <h2 style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <Terminal size={20} color="#6366f1" /> Configuración ESP32
+              </h2>
+              <button className="btn-close" onClick={() => setShowConfigModal(false)}><X size={20}/></button>
+            </div>
+            <div className="modal-body" style={{ padding: '20px' }}>
+              <p style={{ marginBottom: '15px', fontSize: '0.9rem', color: '#64748b' }}>
+                Copia este bloque en tu archivo <code>config.h</code> para vincular el hardware.
+              </p>
+              
+              <div className="code-container" style={{ background: '#1e293b', borderRadius: '8px', overflow: 'hidden' }}>
+                <div style={{ background: '#0f172a', padding: '8px 15px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <span style={{ color: '#94a3b8', fontSize: '0.75rem', fontFamily: 'monospace' }}>arduino_config.h</span>
+                  <button 
+                    onClick={handleCopyCode}
+                    style={{ background: copied ? '#10b981' : '#334155', border: 'none', color: 'white', padding: '4px 8px', borderRadius: '4px', fontSize: '0.7rem', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '5px' }}
+                  >
+                    {copied ? <Check size={12} /> : <Copy size={12} />}
+                    {copied ? 'Copiado' : 'Copiar'}
+                  </button>
+                </div>
+                <pre style={{ margin: 0, padding: '15px', color: '#38bdf8', fontSize: '0.85rem', overflowX: 'auto', fontFamily: 'Fira Code, monospace' }}>
+                  <code>{configSnippet}</code>
+                </pre>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* MODAL DISPOSITIVO (Tu original) */}
       {showDeviceModal && (
         <div className="modal-overlay">
           <div className="modal-content">
@@ -219,7 +285,7 @@ const DevicesPage = () => {
         </div>
       )}
 
-      {/* MODAL SENSOR */}
+      {/* MODAL SENSOR (Tu original) */}
       {showSensorModal && (
         <div className="modal-overlay">
           <div className="modal-content">

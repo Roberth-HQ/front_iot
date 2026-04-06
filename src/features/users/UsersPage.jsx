@@ -14,7 +14,7 @@ const UsersPage = () => {
   }, []);
 
   const fetchUsers = async () => {
-    try {
+    try {users
       const res = await api.get('/users/admins');
       setUsers(res.data);
     } catch (err) { console.error("Error al traer usuarios"); }
