@@ -79,3 +79,82 @@
 
 .spin { animation: spin 1s linear infinite; }
 @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+
+
+/* Botón de Ruta GPS */
+.btn-map {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #ef4444; /* Rojo llamativo */
+  color: white;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 14px rgba(239, 68, 68, 0.4);
+}
+
+.btn-map:hover {
+  background: #dc2626;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(239, 68, 68, 0.6);
+}
+
+.btn-map:active {
+  transform: translateY(0);
+}
+
+/* Barra de Chips de Sensores */
+.sensor-filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 25px;
+  padding: 0 5px;
+}
+
+.filter-chip {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(148, 163, 184, 0.1); /* Fondo sutil */
+  color: #94a3b8;
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.filter-chip:hover {
+  background: rgba(148, 163, 184, 0.2);
+  border-color: rgba(148, 163, 184, 0.5);
+}
+
+/* Cuando el sensor está activo (Visible) */
+.filter-chip.active {
+  background: var(--chip-color); /* Usa el color que pasamos por estilo inline */
+  color: white;
+  border-color: transparent;
+  box-shadow: 0 4px 10px -2px var(--chip-color);
+}
+
+.filter-chip.active span {
+  color: white;
+}
+
+/* Animación de carga para el refresh */
+.spin {
+  animation: rotate 1s linear infinite;
+}
+
+@keyframes rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}

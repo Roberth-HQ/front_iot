@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import api from '../../api/axios'; 
-import { MapPin, ArrowLeft, Plus, Trash2, Edit3, Cpu, ChevronRight, X } from 'lucide-react';
+import { MapPin, ArrowLeft, Plus, Trash2, Edit3, Cpu, ChevronRight, X, Home, Factory, Truck} from 'lucide-react';
 import './Locations.css';
 
 const LocationsPage = () => {
@@ -12,7 +12,7 @@ const LocationsPage = () => {
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [editingId, setEditingId] = useState(null);
-  const [formData, setFormData] = useState({ name: '', address: '' });
+  const [formData, setFormData] = useState({ name: '', address: '', type: 'HOME' });
 
   const fetchLocations = async () => {
     try {
@@ -54,20 +54,20 @@ const LocationsPage = () => {
     setFormData({ name: '', address: '' });
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      if (editingId) {
-        await api.put(`/location/${editingId}`, formData);
-      } else {
-        await api.post(`/location`, { ...formData, projectId });
-      }
-      closeModal();
-      fetchLocations();
-    } catch (err) {
-      alert("Error al guardar");
+ const handleSubmit = async (e) => {
+  e.preventDefault();
+  try {
+    if (editingId) {
+      await api.put(`/location/${editingId}`, formData);
+    } else {
+      await api.post(`/location`, { ...formData, projectId });
     }
-  };
+    closeModal();
+    fetchLocations();
+  } catch (err) {
+    alert("Error al guardar");
+  }
+};
 
   return (
     <div className="locations-container">
@@ -113,19 +113,34 @@ const LocationsPage = () => {
               </div>
 
               <div className="card-icon">
-                <MapPin size={32} color="var(--primary-color)" />
-              </div>
+  {loc.type === 'LOGISTICS' && <Truck size={32} color="#f39c12" />}
+  {loc.type === 'INDUSTRIAL' && <Factory size={32} color="#3498db" />}
+  {loc.type === 'HOME' && <MapPin size={32} color="#2ecc71" />}
+</div>
+{/* Badge informativo */}
+<span className={`location-badge ${loc.type?.toLowerCase()}`}>
+  {loc.type}
+</span>
               <div className="card-info">
                 <h3>{loc.name}</h3>
                 <p>{loc.address || 'Sin dirección registrada'}</p>
               </div>
               
-              <button 
-                className="btn-manage-devices" 
-                onClick={() => navigate(`/location/${loc.id}/devices`)}
-              >
-                <Cpu size={16} /> Gestionar Dispositivos
-              </button>
+{loc.type === 'HOME' ? (
+  <button 
+    className="btn-manage-devices home" 
+    onClick={() => navigate(`/location/${loc.id}/devices`)}
+  >
+    <Cpu size={16} /> Gestionar Dispositivos
+  </button>
+) : (
+  <button 
+    className="btn-manage-devices home" 
+    onClick={() => navigate(`/location/${loc.id}/gateways`)}
+  >
+    <Factory size={16} /> Gestionar Gateways
+  </button>
+)}
             </div>
           ))}
         </div>
@@ -148,6 +163,40 @@ const LocationsPage = () => {
                   onChange={e => setFormData({...formData, name: e.target.value})}
                   required
                 />
+              </div>
+              <div className="form-group">
+                <label>Tipo de Arquitectura / Entorno</label>
+                <div className="architecture-selector">
+                  {/* Opción Hogar */}
+                  <div 
+                    className={`arch-card ${formData.type === 'HOME' ? 'active' : ''}`}
+                    onClick={() => setFormData({...formData, type: 'HOME'})}
+                  >
+                    <Home size={24} />
+                    <span>Hogar / Directo</span>
+                    <small>Dispositivos WiFi directos</small>
+                  </div>
+
+                  {/* Opción Industrial */}
+                  <div 
+                    className={`arch-card ${formData.type === 'INDUSTRIAL' ? 'active' : ''}`}
+                    onClick={() => setFormData({...formData, type: 'INDUSTRIAL'})}
+                  >
+                    <Factory size={24} />
+                    <span>Industrial</span>
+                    <small>Usa Gateways (ESP32)</small>
+                  </div>
+
+                  {/* Opción Logística */}
+                  <div 
+                    className={`arch-card ${formData.type === 'LOGISTICS' ? 'active' : ''}`}
+                    onClick={() => setFormData({...formData, type: 'LOGISTICS'})}
+                  >
+                    <Truck size={24} />
+                    <span>Logística</span>
+                    <small>Seguimiento y Rutas GPS</small>
+                  </div>
+                </div>
               </div>
               <div className="form-group">
                 <label>Dirección / Referencia</label>

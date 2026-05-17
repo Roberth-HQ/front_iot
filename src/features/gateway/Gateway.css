@@ -1,0 +1,228 @@
+/* CONTENEDOR PRINCIPAL */
+.gateways-container { 
+    padding: 2rem; 
+}
+
+/* HEADER Y NAVEGACIÓN */
+.gateways-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 30px;
+    gap: 20px;
+}
+
+/* BREADCRUMBS */
+.breadcrumbs {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 25px;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+.breadcrumb-item.active { color: var(--primary-color); font-weight: 700; }
+.breadcrumb-item.clickable { cursor: pointer; }
+.breadcrumb-item.clickable:hover { color: var(--text-main); }
+
+/* GRID DE TARJETAS MODERNAS */
+.gateways-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1.5rem;
+}
+
+/* LA TARJETA (Con efecto de resplandor) */
+.gateway-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    padding: 1.5rem;
+    border-radius: 15px;
+    position: relative;
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.gateway-card:hover {
+    transform: translateY(-5px);
+    border-color: var(--primary-color);
+    /* El resplandor (Glow effect) */
+    box-shadow: 0 0 20px rgba(99, 102, 241, 0.15); 
+}
+
+/* SECCIÓN SUPERIOR DE LA CARD */
+.gw-card-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.gw-icon-wrapper {
+    background: var(--bg-factory);
+    color: var(--primary-color);
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid var(--border-color);
+}
+
+.gw-info-text h3 {
+    margin: 0;
+    color: var(--text-main);
+    font-size: 1.1rem;
+}
+
+.gw-info-text code {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+}
+
+/* ESTADÍSTICAS INTERNAS */
+.gw-stats-body {
+    background: var(--bg-factory);
+    padding: 12px;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.stat-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.85rem;
+    color: var(--text-main);
+}
+
+/* BOTONES DE ACCIÓN */
+.btn-gw-main {
+    width: 100%;
+    background: var(--bg-factory);
+    border: 1px solid var(--primary-color);
+    color: var(--primary-color);
+    padding: 10px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: all 0.2s;
+}
+
+.btn-gw-main:hover {
+    background: var(--primary-color);
+    color: white;
+}
+
+.gw-actions-row {
+    display: flex;
+    gap: 8px;
+}
+
+.btn-gw-icon {
+    flex: 1;
+    background: var(--bg-factory);
+    border: 1px solid var(--border-color);
+    color: var(--text-muted);
+    padding: 8px;
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+}
+
+.btn-gw-icon:hover {
+    border-color: var(--primary-color);
+    color: var(--text-main);
+}
+
+/* Estados en las Cards */
+.status-pill {
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+/* Color Amarillo para Pendientes */
+.status-pill.pending {
+    background: #fef3c7; /* Amarillo suave */
+    color: #d97706;      /* Naranja oscuro para el texto */
+    border: 1px solid #fde68a;
+}
+
+/* Color Verde para Activos */
+.status-pill.active {
+    background: #dcfce7;
+    color: #16a34a;
+    border: 1px solid #bbf7d0;
+}
+
+/* Estilo de la MAC */
+code {
+    background: var(--bg-factory);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: 'Courier New', Courier, monospace;
+    color: var(--primary-color);
+}
+
+.empty-state-card {
+    text-align: center;
+    padding: 50px;
+    background: var(--bg-card);
+    border: 2px dashed var(--border-color);
+    border-radius: 15px;
+    color: var(--text-muted);
+}
+
+/* Animación Wifi Pulsante */
+.wifi-pulse { animation: pulse-wifi 2s infinite ease-in-out; }
+@keyframes pulse-wifi {
+    0% { opacity: 0.4; transform: scale(0.9); }
+    50% { opacity: 1; transform: scale(1.1); }
+    100% { opacity: 0.4; transform: scale(0.9); }
+}
+
+/* Colores de Estado */
+.status-pill.pending { background: #fef3c7; color: #d97706; border: 1px solid #fde68a; }
+.status-pill.active { background: #dcfce7; color: #16a34a; border: 1px solid #bbf7d0; }
+
+/* Efecto Glow en Card Hover */
+.gateway-card:hover {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 20px rgba(99, 102, 241, 0.2);
+}
+
+/* FONDO OSCURO */
+.modal {
+  position: fixed;        /* 🔥 clave */
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+
+  background: rgba(0, 0, 0, 0.6);
+
+  display: flex;          /* 🔥 centra */
+  justify-content: center;
+  align-items: center;
+
+  z-index: 9999;          /* 🔥 encima de todo */
+}
+
+/* CAJA DEL MODAL */
+.modal-content {
+  background: #fff;
+  padding: 20px;
+  border-radius: 12px;
+  width: 600px;
+  max-width: 90%;
+
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}

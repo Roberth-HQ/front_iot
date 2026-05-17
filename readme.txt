@@ -18,3 +18,6 @@ npm install lucide-react
 
 para el dashboard:
 npm install recharts
+
+
+npm install leaflet react-leaflet

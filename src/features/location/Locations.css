@@ -238,3 +238,49 @@
 .modal-actions { display: flex; gap: 10px; margin-top: 20px; }
 .btn-save { flex: 1; background: var(--primary-color); color: white; border: none; padding: 12px; border-radius: 8px; cursor: pointer; }
 .btn-cancel { flex: 1; background: transparent; border: 1px solid var(--border-color); color: var(--text-muted); padding: 12px; border-radius: 8px; cursor: pointer; }
+
+/* Contenedor de las 3 opciones */
+.architecture-selector {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-top: 8px;
+}
+
+/* Estilo de cada tarjeta */
+.arch-card {
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: center;
+  background: white;
+}
+
+/* Efecto Hover */
+.arch-card:hover {
+  border-color: var(--primary-color);
+  background-color: #f8f9ff;
+}
+
+/* CUANDO ESTÁ SELECCIONADA (La clase 'active' que pusimos en el JS) */
+.arch-card.active {
+  border-color: var(--primary-color);
+  background-color: #ebf2ff;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+}
+
+.arch-card span {
+  font-weight: bold;
+  font-size: 0.9rem;
+  margin-top: 8px;
+}
+
+.arch-card small {
+  font-size: 0.7rem;
+  color: #666;
+}

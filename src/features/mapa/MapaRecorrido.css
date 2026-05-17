@@ -1,0 +1,93 @@
+/* CONTENEDOR PRINCIPAL - Hereda el fondo de tu App */
+.gps-layout {
+  display: flex;
+  height: calc(100vh - 70px);
+  background: transparent; /* Permite que el fondo de tu body/app se vea */
+  color: inherit; /* Hereda el color de texto del tema */
+  font-family: 'Inter', sans-serif;
+}
+
+/* SIDEBAR - Usamos opacidad para que se adapte al fondo del tema */
+.gps-sidebar {
+  width: 300px;
+  background: rgba(128, 128, 128, 0.1); /* Sutil fondo grisáceo que funciona en ambos temas */
+  backdrop-filter: blur(10px);
+  border-right: 1px solid rgba(128, 128, 128, 0.2);
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar-header {
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-bottom: 1px solid rgba(128, 128, 128, 0.2);
+}
+
+/* SELECTOR DE FECHA - Estilo neutro */
+.date-selector {
+  background: rgba(128, 128, 128, 0.1);
+  color: inherit;
+  border: 1px solid rgba(128, 128, 128, 0.3);
+  padding: 8px;
+  border-radius: 8px;
+  cursor: pointer;
+  flex: 1;
+}
+
+/* TARJETAS DEL HISTORIAL */
+.timeline-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 10px;
+}
+
+.timeline-card {
+  display: flex;
+  align-items: center;
+  padding: 12px;
+  background: rgba(128, 128, 128, 0.1);
+  margin-bottom: 8px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.timeline-card:hover {
+  background: rgba(128, 128, 128, 0.2);
+}
+
+.timeline-card.active {
+  border: 1px solid #ef4444;
+  background: rgba(239, 68, 68, 0.1);
+}
+
+.time-tag {
+  background: #ef4444;
+  color: white; /* El tag de hora siempre blanco para contraste */
+  padding: 4px 8px;
+  border-radius: 5px;
+  font-size: 0.75rem;
+  font-weight: bold;
+  margin-right: 12px;
+}
+
+.info span { font-size: 0.9rem; font-weight: 600; }
+.info small { opacity: 0.7; font-size: 0.75rem; }
+
+/* MAPA - Quitamos los filtros de inversión de color */
+.map-frame { flex: 1; position: relative; }
+.leaflet-container { 
+  height: 100%; 
+  width: 100%; 
+  z-index: 1;
+}
+
+/* OPCIONAL: Si quieres que el mapa cambie un POCO en modo oscuro, 
+   puedes usar esto en tu archivo de estilos globales donde manejas el tema: */
+/*
+body.dark-mode .leaflet-tile-pane {
+    filter: brightness(0.6) invert(100%) contrast(90%) hue-rotate(180deg);
+}
+*/

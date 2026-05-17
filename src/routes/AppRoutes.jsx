@@ -11,6 +11,8 @@ import Dashboard from '../features/board/Dashboard';
 import BlockchainPage from '../features/blockchain/BlockchainPage';
 import UsersPage from '../features/users/UsersPage';
 import SettingsPage from '../features/configuration/SettingsPage';
+import GatewaysPage from '../features/gateway/GatewayPages';
+import MapaRecorrido from '../features/mapa/MapaRecorrido';
 
 export const AppRoutes = () => {
   // 1. IMPORTANTE: Extraemos isAuthenticated CORRECTAMENTE
@@ -41,6 +43,8 @@ export const AppRoutes = () => {
             <Route path="/blockchain" element={<BlockchainPage />} />
             <Route path='/usuarios' element={<UsersPage/>} />
             <Route path='/configuracion' element={<SettingsPage/>} />
+            <Route path='/location/:locationId/gateways' element={<GatewaysPage/>}/>
+            <Route path='/mapa-recorrido' element={<MapaRecorrido />} />
           </Route>
 
           

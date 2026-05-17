@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import api from '../../../api/axios';
-import { Home, Factory, Trash2, Edit3, ChevronRight } from 'lucide-react';
+import { Home, Factory, Trash2, Edit3, ChevronRight, Sprout, Cable } from 'lucide-react';
 import './Proyectos.css';
 import { useNavigate } from 'react-router-dom';
 
@@ -20,21 +20,21 @@ const ProyectosPage = () => {
 
   useEffect(() => { fetchProyectos(); }, []);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const { type, ...dataToSend } = formData;
-    try {
-      if (editingId) {
-        await api.put(`/project/${editingId}`, dataToSend);
-      } else {
-        await api.post('/project', dataToSend);
-      }
-      closeModal();
-      fetchProyectos();
-    } catch (err) {
-      alert("Error al procesar la solicitud");
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  try {
+    if (editingId) {
+      // Enviamos TODO el formData, incluyendo el nuevo type
+      await api.put(`/project/${editingId}`, formData); 
+    } else {
+      await api.post('/project', formData);
     }
-  };
+    closeModal();
+    fetchProyectos();
+  } catch (err) {
+    alert("Error al procesar la solicitud");
+  }
+};
 
   const handleDelete = async (id) => {
     if (window.confirm("¿Seguro que quieres eliminar este proyecto?")) {
@@ -60,7 +60,7 @@ const ProyectosPage = () => {
   const closeModal = () => {
     setShowModal(false);
     setEditingId(null);
-    setFormData({ name: '', description: '', type: 'CASA' });
+    setFormData({ name: '', description: '', type: 'HOME' });
   };
 
   return (
@@ -95,12 +95,13 @@ const ProyectosPage = () => {
             <div className="proyecto-icon">
               {p.type === 'INDUSTRIA' ? 
                 <Factory size={48} className="icon-svg-industry" /> : 
-                <Home size={48} className="icon-svg-home" />
+                <Cable size={48} className="icon-svg-home" />
+                // <Sprout size={48} className="icon-svg-home" />
               }
             </div>
             
             <h3>{p.name}</h3>
-            <span className={`badge ${p.type?.toLowerCase() || 'casa'}`}>{p.type || 'CASA'}</span>
+            {/* <span className={`badge ${p.type?.toLowerCase() || 'casa'}`}>{p.type || 'CAMBIAR AQUI'}</span> */}
             <p className="description">{p.description}</p>
             
             <button 
@@ -128,17 +129,6 @@ const ProyectosPage = () => {
                 />
               </div>
               
-              <div className="form-group">
-                <label>Tipo de Entorno</label>
-                <select 
-                  value={formData.type}
-                  onChange={e => setFormData({...formData, type: e.target.value})}
-                  className="modal-select"
-                >
-                  <option value="CASA">🏠 Hogar / Residencial</option>
-                  <option value="INDUSTRIA">🏭 Industrial</option>
-                </select>
-              </div>
 
               <div className="form-group">
                 <label>Descripción</label>
