@@ -391,3 +391,142 @@
   border-left: 2px solid #f59e0b;
 }
 
+
+
+
+
+
+
+
+/* Panel de lecturas */
+
+.bc-readings-loading {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1.5rem;
+  color: #64748b;
+  font-size: 0.8rem;
+  justify-content: center;
+}
+.bc-readings-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  background: rgba(129,140,248,0.05);
+}
+.bc-readings-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #cbd5e1;
+}
+.bc-readings-count {
+  font-size: 0.68rem;
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+  font-weight: 700;
+}
+
+.bc-readings-close {
+  display: flex; align-items: center; gap: 0.3rem;
+  font-size: 0.72rem; color: #475569;
+  background: none; border: none; cursor: pointer;
+  font-family: inherit;
+}
+.bc-readings-close:hover { color: #94a3b8; }
+
+/* Tabla */
+.bc-readings-table-wrap {
+  overflow-x: auto;
+}
+.bc-readings-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.75rem;
+}
+.bc-readings-table th {
+  padding: 0.5rem 0.75rem;
+  text-align: left;
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #475569;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  white-space: nowrap;
+}
+.bc-readings-table td {
+  padding: 0.6rem 0.75rem;
+  border-bottom: 1px solid rgba(255,255,255,0.03);
+  vertical-align: middle;
+}
+.bc-reading-row.ok      { background: transparent; }
+.bc-reading-row.tampered { background: rgba(239,68,68,0.04); }
+.bc-reading-row.deleted  { background: rgba(239,68,68,0.08); }
+.bc-reading-row.unknown  { background: rgba(148,163,184,0.04); }
+.bc-reading-row:last-child td { border-bottom: none; }
+
+.bc-reading-status-badge {
+  display: inline-flex; align-items: center; gap: 0.3rem;
+  padding: 0.2rem 0.5rem; border-radius: 4px;
+  font-size: 0.68rem; font-weight: 700; white-space: nowrap;
+}
+.bc-reading-status-badge.ok      { color: #22c55e; background: rgba(34,197,94,0.1); }
+.bc-reading-status-badge.tampered { color: #f87171; background: rgba(239,68,68,0.1); }
+.bc-reading-status-badge.deleted  { color: #ef4444; background: rgba(239,68,68,0.15); }
+.bc-reading-status-badge.unknown  { color: #94a3b8; background: rgba(148,163,184,0.1); }
+
+.bc-reading-sensor { display: flex; flex-direction: column; gap: 0.1rem; }
+.bc-reading-sensor-name { color: #000000; font-weight: 600; }
+.bc-reading-sensor-type { font-size: 0.65rem; color: #475569; text-transform: uppercase; }
+
+.bc-reading-value        { color: #7dd3fc; font-size: 0.8rem; }
+.bc-reading-value.tampered { color: #f87171; font-weight: 700; }
+
+.bc-reading-ts   { color: #64748b; font-size: 0.7rem; white-space: nowrap; }
+.bc-reading-hash { font-size: 0.68rem; color: #334155; }
+
+.bc-reading-detalle         { font-size: 0.68rem; }
+.bc-reading-detalle.tampered { color: #f87171; }
+.bc-reading-detalle.deleted  { color: #ef4444; }
+.bc-reading-detalle.unknown  { color: #64748b; }
+
+
+
+
+
+/* Panel fallo de cadena — aparece sin verificar, solo con re-auditar */
+.bc-chain-fallo-panel {
+  margin: 0 1.25rem 0.75rem;
+  padding: 0.875rem 1rem;
+  border-radius: 8px;
+  background: rgba(245,158,11,0.06);
+  border: 1px solid rgba(245,158,11,0.25);
+  border-left: 3px solid #f59e0b;
+}
+.bc-chain-fallo-title {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #f59e0b;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 0.5rem;
+}
+.bc-chain-fallo-motivo {
+  font-size: 0.78rem;
+  color: #fbbf24;
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+.bc-chain-fallo-detalle {
+  font-size: 0.7rem;
+  color: #64748b;
+  line-height: 1.5;
+}
