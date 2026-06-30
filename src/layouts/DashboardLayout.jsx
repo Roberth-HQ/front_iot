@@ -42,14 +42,14 @@ const DashboardLayout = () => {
     <div className="dashboard-container">
       <aside className="sidebar">
         <div className="sidebar-header">
-          <span className="logo-icon">🧊</span> Cube Factory
+          <span ></span> Blockchain IoT
         </div>
         
         <nav className="sidebar-menu">
           {[
             { name: 'Dashboard', path: '/dashboard', icon: <LayoutDashboard size={20} /> },
             { name: 'Proyectos', path: '/proyectos', icon: <FolderKanban size={20} /> },
-            { name: 'Dispositivos', path: '/dispositivos', icon: <Cpu size={20} /> },
+            // { name: 'Dispositivos', path: '/dispositivos', icon: <Cpu size={20} /> },
             { name: 'Blockchain', path: '/blockchain', icon: <LinkIcon size={20} /> },
             { name: 'Usuarios', path: '/usuarios', icon: <Users size={20} /> },
             { name: 'Configuración', path: '/configuracion', icon: <Settings size={20} /> },

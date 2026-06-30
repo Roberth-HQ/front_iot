@@ -5,7 +5,7 @@ import {
   ShieldCheck, ShieldAlert, ShieldX, Clock, Database,
   CheckCircle, RefreshCw, Box, Lock, ChevronDown, ChevronUp,
   AlertTriangle, Fingerprint, Hash, Layers, Eye, Zap,
-  ScanSearch, Trash2, FileX, Edit3, Table2, Link, LinkOff
+  ScanSearch, Trash2, FileX, Edit3, Table2, Link, Unlink
 } from 'lucide-react';
 import './BlockchainPage.css';
 
@@ -372,7 +372,7 @@ export default function BlockchainPage() {
                       color: '#f59e0b', background: 'rgba(245,158,11,0.1)',
                       border: '1px solid #f59e0b40'
                     }}>
-                      <LinkOff size={10}/> ESLABÓN ROTO
+                      <Unlink size={10}/> ESLABÓN ROTO
                     </span>
                   )}
                   {!chainFallo && auditReport && !result && (
@@ -415,7 +415,7 @@ export default function BlockchainPage() {
                 {chainFallo && (
                   <div className="bc-chain-fallo-panel">
                     <div className="bc-chain-fallo-title">
-                      <LinkOff size={13}/> Fallo en cadena detectado
+                      <Unlink size={13}/> Fallo en cadena detectado
                     </div>
                     <div className="bc-chain-fallo-motivo">{chainFallo.motivo}</div>
                     {chainFallo.detalle && (

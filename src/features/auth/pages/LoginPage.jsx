@@ -44,7 +44,7 @@ const LoginPage = () => {
       {/* --- LADO DERECHO (LOGIN) --- */}
       <div className="login-section">
         <div className="login-form-wrapper">
-          <h2 className="factory-logo">Cube Factory</h2>
+          <h2 className="factory-logo">Blockchain IoT</h2>
           
           <form onSubmit={handleFormSubmit}>
             <Input 
